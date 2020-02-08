@@ -1,4 +1,4 @@
 #!/bin/bash
-screen -S 14188 -p 0 -X stuff "say Server will fall after 30 sec^M"
+screen -S 14188 -p 0 -X stuff 'say Server will fall after 30 sec^M'
 sleep 30
-screen -S 14188 -p 0 -X stuff "stop^M"
+screen -S 14188 -p 0 -X stuff 'stop^M'

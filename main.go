@@ -4,8 +4,8 @@ import (
 	stoper "./serverStoper"
 )
 
-const SCREEN_ID string = "6154"
+const SCREEN_ID string = "14188"
 
 func main() {
-	stoper.StopServer(SCREEN_ID)
+	stoper.StopServer(SCREEN_ID, 30)
 }
