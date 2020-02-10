@@ -4,6 +4,7 @@ import (
 	"./packer"
 	starter "./serverStarter"
 	stoper "./serverStoper"
+	"./uploader"
 	"flag"
 )
 
@@ -14,6 +15,6 @@ func main() {
 	flag.Parse()
 
 	stoper.StopServer(*new_screen_id, *new_stoper_time)
-	packer.MakePack(*new_server_path)
+	uploader.UploadPack(packer.MakePack(*new_server_path))
 	starter.StartServer(*new_screen_id)
 }

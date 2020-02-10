@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func MakePack(files_path string) {
+func MakePack(files_path string) (pack_name string) {
 	if files_path != "" {
 		packerScriptCreator(files_path)
 	}
@@ -23,6 +23,12 @@ func MakePack(files_path string) {
 	} else {
 		log.Fatalf("packer script can't be found and you didn't get parameters to create new one!")
 	}
+
+	dt := time.Now()
+	_, month, day := dt.Date()
+	pack_name = fmt.Sprintf("%v_%v.7z", month.String(), day)
+
+	return pack_name
 }
 
 func packerScriptCreator(files_path string) {
