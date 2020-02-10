@@ -15,20 +15,24 @@ func init() {
 	}
 }
 
-func StopServer(screen_id string, time_before_stop int) {
-	if screen_id != "" {
+func StopServer(screen_id int, time_before_stop int) {
+	if screen_id != 0 {
 		stoperScriptCreator(screen_id, time_before_stop)
 	}
 
-	cmd := exec.Command("/bin/sh", "stoper")
-	err := cmd.Run()
-	if err != nil {
-		log.Fatalf("cmd.Run(screen -r) failed with %s\n", err)
+	_, err := os.Open("stoper")
+	if err == nil {
+		cmd := exec.Command("/bin/sh", "stoper")
+		err := cmd.Run()
+		if err != nil {
+			log.Fatalf("cmd.Run(stoper) failed with %s\n", err)
+		}
+	} else {
+		log.Fatalf("stoper script can't be found and you didn't get parameters to create new one!")
 	}
-
 }
 
-func stoperScriptCreator(screen_id string, time_before_stop int) {
+func stoperScriptCreator(screen_id int, time_before_stop int) {
 	stoper_script, err := os.Create("stoper")
 	if err != nil {
 		log.Fatalf("File can't be created; %s\n", err)
