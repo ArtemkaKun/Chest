@@ -6,6 +6,8 @@ import (
 	stoper "./serverStoper"
 	"./uploader"
 	"flag"
+	"fmt"
+	"sync"
 )
 
 func main() {
@@ -14,7 +16,20 @@ func main() {
 	new_server_path := flag.String("sf", "", "Make new packer script (place here path to your Minecraft server files)")
 	flag.Parse()
 
+	fmt.Println("The server will be stopped after delay")
 	stoper.StopServer(*new_screen_id, *new_stoper_time)
-	uploader.UploadPack(packer.MakePack(*new_server_path))
+
+	fmt.Println("The server was stopped. Process of backup making was started...")
+	new_pack := packer.MakePack(*new_server_path)
+
+	fmt.Println("Backup file was successfully created! Process of uploading was started...")
+	var upload_gorutine sync.WaitGroup
+	upload_gorutine.Add(1)
+	go uploader.UploadPack(new_pack)
+
+	fmt.Println("Starting the server...")
 	starter.StartServer(*new_screen_id)
+	fmt.Println("The server started")
+
+	upload_gorutine.Wait()
 }
