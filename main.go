@@ -23,13 +23,13 @@ func main() {
 	new_pack := packer.MakePack(*new_server_path)
 
 	fmt.Println("Backup file was successfully created! Process of uploading was started...")
-	var upload_gorutine sync.WaitGroup
-	upload_gorutine.Add(1)
-	go uploader.UploadPack(new_pack)
+	var upload_goroutine sync.WaitGroup
+	upload_goroutine.Add(1)
+	go uploader.UploadPack(new_pack, &upload_goroutine)
 
 	fmt.Println("Starting the server...")
 	starter.StartServer(*new_screen_id)
 	fmt.Println("The server started")
 
-	upload_gorutine.Wait()
+	upload_goroutine.Wait()
 }

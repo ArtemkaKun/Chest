@@ -12,6 +12,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"sync"
 )
 
 // Retrieve a token, saves the token, then returns the generated client.
@@ -112,7 +113,8 @@ func createFile(service *drive.Service, name string, mimeType string, content io
 	return file, nil
 }
 
-func UploadPack(pack_name string) {
+func UploadPack(pack_name string, pool *sync.WaitGroup) {
+	defer pool.Done()
 	// Step 1. Open the file
 	f, err := os.Open(fmt.Sprintf("%v", pack_name))
 
