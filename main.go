@@ -39,7 +39,7 @@ func main() {
 		//need endless circle here because program wait for backup time and check time every minute
 		for true {
 			if (time.Now().Hour() == backup_time.Hour()) && (time.Now().Minute() == backup_time.Minute()) {
-				backupProcess(new_screen_id, new_stoper_time, new_server_path, backup_folder_path, max_files)
+				backupProcess(*new_screen_id, *new_stoper_time, *new_server_path, *backup_folder_path, *max_files)
 				time.Sleep(time.Minute)
 				continue
 			} else {
@@ -47,28 +47,28 @@ func main() {
 			}
 		}
 	} else {
-		backupProcess(new_screen_id, new_stoper_time, new_server_path, backup_folder_path, max_files)
+		backupProcess(*new_screen_id, *new_stoper_time, *new_server_path, *backup_folder_path, *max_files)
 	}
 }
 
-func backupProcess(new_screen_id *int, new_stoper_time *int, new_server_path *string, backup_folder_path *string, max_files *int) {
+func backupProcess(new_screen_id int, new_stoper_time int, new_server_path string, backup_folder_path string, max_files int) {
 	fmt.Println("The server will be stopped after delay")
-	stoper.StopServer(*new_screen_id, *new_stoper_time)
+	stoper.StopServer(new_screen_id, new_stoper_time)
 
 	fmt.Println("The server was stopped. Process of backup making was started...")
-	new_pack := packer.MakePack(*new_server_path)
+	new_pack := packer.MakePack(new_server_path)
 
 	fmt.Println("Backup file was successfully created! Process of uploading was started...")
 	var upload_goroutine sync.WaitGroup
 	upload_goroutine.Add(1)
-	go uploader.UploadPack(new_pack, &upload_goroutine, *backup_folder_path)
+	go uploader.UploadPack(new_pack, &upload_goroutine, backup_folder_path)
 
 	fmt.Println("Starting the server...")
-	starter.StartServer(*new_screen_id)
+	starter.StartServer(new_screen_id)
 	fmt.Println("The server started")
 
 	//need to wait while uploading backup will be completed
 	upload_goroutine.Wait()
 
-	deleter.CheckOld(*backup_folder_path, *max_files)
+	deleter.CheckOld(backup_folder_path, max_files)
 }
