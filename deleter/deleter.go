@@ -75,7 +75,7 @@ func getService() (*drive.Service, error) {
 	}
 
 	// If modifying these scopes, delete your previously saved token.json.
-	config, err := google.ConfigFromJSON(b, drive.DriveFileScope)
+	config, err := google.ConfigFromJSON(b, drive.DriveScope)
 
 	if err != nil {
 		return nil, err
