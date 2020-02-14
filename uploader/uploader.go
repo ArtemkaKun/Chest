@@ -113,7 +113,7 @@ func createFile(service *drive.Service, name string, mimeType string, content io
 	return file, nil
 }
 
-func UploadPack(pack_name string, pool *sync.WaitGroup) {
+func UploadPack(pack_name string, pool *sync.WaitGroup, backup_folder string) {
 	defer pool.Done()
 	// Step 1. Open the file
 	f, err := os.Open(fmt.Sprintf("%v", pack_name))
@@ -127,11 +127,11 @@ func UploadPack(pack_name string, pool *sync.WaitGroup) {
 	// Step 2. Get the Google Drive service
 	service, err := getService()
 
-	file, err := createFile(service, pack_name, "application/x-7z-compressed", f, "root")
+	file, err := createFile(service, pack_name, "application/x-7z-compressed", f, backup_folder)
 
 	if err != nil {
 		panic(fmt.Sprintf("Could not create file: %v\n", err))
 	}
 
-	fmt.Printf("File '%s' successfully uploaded in '%s' directory", file.Name, "root")
+	fmt.Printf("File '%s' successfully uploaded in '%s' directory\n", file.Name, "")
 }
