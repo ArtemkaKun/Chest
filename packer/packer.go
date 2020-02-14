@@ -27,6 +27,7 @@ func MakePack(files_path string) (pack_name string) {
 
 	dt := time.Now()
 
+	//fmtdate package make normal date form that is tha same with bash date form
 	pack_name = fmt.Sprintf("%v.7z", fmtdate.FormatDate(dt))
 
 	return pack_name
@@ -39,7 +40,7 @@ func packerScriptCreator(files_path string) {
 	}
 
 	defer packer_script.Close()
-
+	//pack to .tar archive and than to .7z archive. Why? Go to Google and read about .tar format
 	_, err = packer_script.WriteString(fmt.Sprintf("#!/bin/bash\nyear=$(date +'%%Y')\nmonth=$(date +'%%m')\nday=$(date +'%%d')\ntar -cf $year-$month-$day.tar %v\n7z a $year-$month-$day.7z $year-$month-$day.tar", files_path))
 	if err != nil {
 		log.Fatalf("File can't be writed; %s\n", err)

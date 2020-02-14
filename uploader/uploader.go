@@ -114,17 +114,15 @@ func createFile(service *drive.Service, name string, mimeType string, content io
 }
 
 func UploadPack(pack_name string, pool *sync.WaitGroup, backup_folder string) {
+	//need to do this for send signal "Done" where the goroutine completes it work
 	defer pool.Done()
-	// Step 1. Open the file
-	f, err := os.Open(fmt.Sprintf("%v", pack_name))
 
+	f, err := os.Open(fmt.Sprintf("%v", pack_name))
 	if err != nil {
 		panic(fmt.Sprintf("cannot open file: %v", err))
 	}
-
 	defer f.Close()
 
-	// Step 2. Get the Google Drive service
 	service, err := getService()
 
 	file, err := createFile(service, pack_name, "application/x-7z-compressed", f, backup_folder)
@@ -132,6 +130,5 @@ func UploadPack(pack_name string, pool *sync.WaitGroup, backup_folder string) {
 	if err != nil {
 		panic(fmt.Sprintf("Could not create file: %v\n", err))
 	}
-
 	fmt.Printf("File '%s' successfully uploaded in '%s' directory\n", file.Name, "")
 }
