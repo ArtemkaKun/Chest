@@ -126,8 +126,9 @@ func CheckOld(backup_folder string, max_files int) {
 				}
 			}
 
-			for _, k := range r.Files {
-				fmt.Printf("%v (%vs )\n", k.Name, k.Id)
+			for _, k := range r.Files[0 : len(r.Files)-max_files] {
+				service.Files.Delete(k.Id).Do()
+				fmt.Printf("%v (%vs) was deleted\n", k.Name, k.Id)
 			}
 		}
 	}
