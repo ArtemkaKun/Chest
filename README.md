@@ -6,7 +6,7 @@
 
 "Chest" is a program, created in Golang, that allows administrators to back up their Minecraft servers automatically.
 
-## What the Chest can do?
+## What Chest can do?
 ✅ Automatically stop the Minecraft server (only when you use *screen* tool for run your server)
 
 ✅ Pack server files to .7z archive (actually it pack it to .tar archive and then to .7z)
@@ -22,11 +22,11 @@ The main program was written in Go, but for work it uses Bash scripts (**Chest c
 
 For uploading backups to cloud storage it uses APIs (for example Google Drive API), but you also need to generate some additional files to perform this action (please, check the wiki for instructions).
 
-## What servers the Chest tool support?
+## What servers Chest tool support?
 - [x] Linux servers
 - [ ] Windows servers
 
-## What cloud storages the Chest tool suppport?
+## What cloud storages Chest tool suppport?
 - [x] Google Drive
 - [ ] Yandex Disk
 - [ ] Mega
@@ -34,7 +34,7 @@ For uploading backups to cloud storage it uses APIs (for example Google Drive AP
 - [ ] Dropbox
 - [ ] FTP clouds
 
-## How to start using the Chest tool?
+## How to start using Chest tool?
 [First start](https://github.com/ArtemkaKun/Chest/wiki/First-start)
 
 [How to build](https://github.com/ArtemkaKun/Chest/wiki/How-to-build)
