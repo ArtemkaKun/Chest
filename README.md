@@ -7,15 +7,15 @@
 "Chest" is a program, created in Golang, that allows administrators to back up their Minecraft servers automatically.
 
 ## What the Chest can do?
-:white_check_mark: Automatically stop the Minecraft server
+✅ Automatically stop the Minecraft server
 
-:white_check_mark: Pack server files to .7z archive (actually it pack it to .tar archive and then to .7z)
+✅ Pack server files to .7z archive (actually it pack it to .tar archive and then to .7z)
 
-:white_check_mark: Upload a backup archive to Google Drive
+✅ Upload a backup archive to Google Drive
 
-:white_check_mark: Automatically start the Minecraft server
+✅ Automatically start the Minecraft server
 
-:white_check_mark: Delete old backup archives from Google Drive
+✅ Delete old backup archives from Google Drive
 
 ## How it does this?
 The main program was written in Go, but for work it uses Bash scripts (**Chest can create these scripts automatically** when you start the tool with flags or you can create scripts manually). 
