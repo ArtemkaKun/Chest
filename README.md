@@ -4,6 +4,8 @@
 ![GitHub All Releases](https://img.shields.io/github/downloads/artemkakun/chest/total?color=green&label=Downloads)
 ![CircleCI](https://img.shields.io/circleci/build/github/ArtemkaKun/Chest)
 
+![Chest](https://i.imgur.com/HFnDwx9.png)
+
 "Chest" is a program, created in Golang, that allows administrators to back up their Minecraft servers automatically.
 
 ## What Chest can do?
