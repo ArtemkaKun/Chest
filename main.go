@@ -1,13 +1,13 @@
 package main
 
 import (
-	"Chest/deleter"
-	"Chest/packer"
-	starter "Chest/serverStarter"
-	stoper "Chest/serverStoper"
-	"Chest/uploader"
 	"flag"
 	"fmt"
+	"github.com/ArtemkaKun/Chest/deleter"
+	"github.com/ArtemkaKun/Chest/packer"
+	starter "github.com/ArtemkaKun/Chest/serverStarter"
+	stoper "github.com/ArtemkaKun/Chest/serverStoper"
+	"github.com/ArtemkaKun/Chest/uploader"
 	"sync"
 	"time"
 )
