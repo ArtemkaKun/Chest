@@ -1,11 +1,11 @@
 package main
 
 import (
-	"./deleter"
-	"./packer"
-	starter "./serverStarter"
-	stoper "./serverStoper"
-	"./uploader"
+	"Chest/deleter"
+	"Chest/packer"
+	starter "Chest/serverStarter"
+	stoper "Chest/serverStoper"
+	"Chest/uploader"
 	"flag"
 	"fmt"
 	"sync"
