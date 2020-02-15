@@ -3,7 +3,7 @@
 ![Stable version](https://img.shields.io/badge/Stable-v0.0.1-green)
 ![GitHub All Releases](https://img.shields.io/github/downloads/artemkakun/chest/total?color=green&label=Downloads)
 
-"Chest" is a program, created in Golang, that allows administrators to backup their Minecraft servers automatically.
+"Chest" is a program, created in Golang, that allows administrators to back up their Minecraft servers automatically.
 
 ## What the Chest can do?
 :white_check_mark: Automatically stop the Minecraft server
@@ -16,12 +16,12 @@
 
 :white_check_mark: Delete old backup archives from Google Drive
 
-## How it do this?
-Main program was writed in Go, but for work it use Bash scripts (**Chest can create these scripts automatically** when you start the tool with flags or you can create scripts manually). 
+## How it does this?
+The main program was written in Go, but for work it uses Bash scripts (**Chest can create these scripts automatically** when you start the tool with flags or you can create scripts manually). 
 
-For uploading backups to cloud storage it use APIs (for example Google Drive API), but you also need to generate some additional files to perform this action (please, check the wiki for instructions).
+For uploading backups to cloud storage it uses APIs (for example Google Drive API), but you also need to generate some additional files to perform this action (please, check the wiki for instructions).
 
-## What servers the Chest tool suppport?
+## What servers the Chest tool support?
 - [x] Linux servers
 - [ ] Windows servers
 
@@ -33,7 +33,7 @@ For uploading backups to cloud storage it use APIs (for example Google Drive API
 - [ ] Dropbox
 - [ ] FTP clouds
 
-## How to start use the Chest tool?
+## How to start using the Chest tool?
 [First start](https://github.com/ArtemkaKun/Chest/wiki/First-start)
 
 [How to build](https://github.com/ArtemkaKun/Chest/wiki/How-to-build)
