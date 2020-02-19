@@ -4,29 +4,31 @@
 ![GitHub All Releases](https://img.shields.io/github/downloads/artemkakun/chest/total?color=green&label=Downloads)
 ![CircleCI](https://img.shields.io/circleci/build/github/ArtemkaKun/Chest)
 
+![Chest](https://i.imgur.com/HFnDwx9.png)
+
 "Chest" is a program, created in Golang, that allows administrators to back up their Minecraft servers automatically.
 
-## What the Chest can do?
-:white_check_mark: Automatically stop the Minecraft server
+## What Chest can do?
+✅ Automatically stop the Minecraft server (only when you use *screen* tool for run your server)
 
-:white_check_mark: Pack server files to .7z archive (actually it pack it to .tar archive and then to .7z)
+✅ Pack server files to .7z archive (actually it pack it to .tar archive and then to .7z)
 
-:white_check_mark: Upload a backup archive to Google Drive
+✅ Upload a backup archive to Google Drive
 
-:white_check_mark: Automatically start the Minecraft server
+✅ Automatically start the Minecraft server (only when you use *screen* tool for run your server)
 
-:white_check_mark: Delete old backup archives from Google Drive
+✅ Delete old backup archives from Google Drive
 
 ## How it does this?
 The main program was written in Go, but for work it uses Bash scripts (**Chest can create these scripts automatically** when you start the tool with flags or you can create scripts manually). 
 
 For uploading backups to cloud storage it uses APIs (for example Google Drive API), but you also need to generate some additional files to perform this action (please, check the wiki for instructions).
 
-## What servers the Chest tool support?
+## What servers Chest tool support?
 - [x] Linux servers
 - [ ] Windows servers
 
-## What cloud storages the Chest tool suppport?
+## What cloud storages Chest tool suppport?
 - [x] Google Drive
 - [ ] Yandex Disk
 - [ ] Mega
@@ -34,7 +36,7 @@ For uploading backups to cloud storage it uses APIs (for example Google Drive AP
 - [ ] Dropbox
 - [ ] FTP clouds
 
-## How to start using the Chest tool?
+## How to start using Chest tool?
 [First start](https://github.com/ArtemkaKun/Chest/wiki/First-start)
 
 [How to build](https://github.com/ArtemkaKun/Chest/wiki/How-to-build)
