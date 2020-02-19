@@ -1,4 +1,4 @@
-package serverStoper
+package main
 
 import (
 	"fmt"

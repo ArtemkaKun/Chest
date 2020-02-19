@@ -1,4 +1,4 @@
-package deleter
+package main
 
 import (
 	"context"
@@ -7,13 +7,15 @@ import (
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/drive/v3"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
-	"time"
+	"sync"
 )
 
+// Retrieve a token, saves the token, then returns the generated client.
 func getClient(config *oauth2.Config) *http.Client {
 	// The file token.json stores the user's access and refresh tokens, and is
 	// created automatically when the authorization flow completes for the first
@@ -94,42 +96,39 @@ func getService() (*drive.Service, error) {
 	return service, err
 }
 
-func CheckOld(backup_folder string, max_files int) {
+func createFile(service *drive.Service, name string, mimeType string, content io.Reader, parentId string) (*drive.File, error) {
+	f := &drive.File{
+		MimeType: mimeType,
+		Name:     name,
+		Parents:  []string{parentId},
+	}
+
+	file, err := service.Files.Create(f).Media(content).Do()
+
+	if err != nil {
+		log.Println("Could not create file: " + err.Error())
+		return nil, err
+	}
+
+	return file, nil
+}
+
+func UploadPack(pack_name string, pool *sync.WaitGroup, backup_folder string) {
+	//need to do this for send signal "Done" where the goroutine completes it work
+	defer pool.Done()
+
+	f, err := os.Open(fmt.Sprintf("%v", pack_name))
+	if err != nil {
+		panic(fmt.Sprintf("cannot open file: %v", err))
+	}
+	defer f.Close()
+
 	service, err := getService()
+
+	file, err := createFile(service, pack_name, "application/x-7z-compressed", f, backup_folder)
+
 	if err != nil {
-		log.Fatalf("Unable to retrieve Drive client: %v", err)
+		panic(fmt.Sprintf("Could not create file: %v\n", err))
 	}
-
-	r, err := service.Files.List().Q(fmt.Sprintf("'%v' in parents", backup_folder)).Do()
-	if err != nil {
-		log.Fatalf("Unable to retrieve files: %v", err)
-	}
-	if len(r.Files) == 0 {
-		fmt.Println("No files found.")
-	} else {
-		if len(r.Files) > max_files {
-			for range r.Files {
-				for n, j := range r.Files {
-					file_date, err := time.Parse("2006-01-02", j.Name[0:len(j.Name)-3])
-					if err != nil {
-						log.Fatalf("%v", err)
-					}
-					if n+1 <= len(r.Files)-1 {
-						next_file_date, _ := time.Parse("2006-01-02", r.Files[n+1].Name[0:len(j.Name)-3])
-
-						if file_date.After(next_file_date) {
-							buffer := r.Files[n]
-							r.Files[n] = r.Files[n+1]
-							r.Files[n+1] = buffer
-						}
-					}
-				}
-			}
-
-			for _, k := range r.Files[0 : len(r.Files)-max_files] {
-				service.Files.Delete(k.Id).Do()
-				fmt.Printf("%v (%vs) was deleted\n", k.Name, k.Id)
-			}
-		}
-	}
+	fmt.Printf("File '%s' successfully uploaded in '%s' directory\n", file.Name, "")
 }
