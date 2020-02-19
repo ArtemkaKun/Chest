@@ -1,11 +1,12 @@
 package main
 
 import (
-	"./deleter"
-	"./packer"
-	starter "./serverStarter"
-	stoper "./serverStoper"
-	"./uploader"
+	"Chest/cleaner"
+	"Chest/deleter"
+	"Chest/packer"
+	starter "Chest/serverStarter"
+	stoper "Chest/serverStoper"
+	"Chest/uploader"
 	"flag"
 	"fmt"
 	"sync"
@@ -71,4 +72,5 @@ func backupProcess(new_screen_id int, new_stoper_time int, new_server_path strin
 	upload_goroutine.Wait()
 
 	deleter.CheckOld(backup_folder_path, max_files)
+	cleaner.CleanBackups(new_pack)
 }
