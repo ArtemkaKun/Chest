@@ -27,6 +27,7 @@ func main() {
 	test_mode := flag.Bool("test", false, "Turn on test mode, that allow not wait for backup time")
 	new_hour := flag.Int("h", 00, "Hour when program need to backup")
 	new_minute := flag.Int("m", 00, "Minute when program need to backup")
+	rar_mode := flag.Bool("rar", false, "If you want to make RAR archives")
 	flag.Parse()
 
 	backup_time := time.Date(time.Now().Year(), time.Now().Month(), time.Now().Day(), *new_hour, *new_minute, 0, 0, time.Now().UTC().Location())
@@ -34,7 +35,7 @@ func main() {
 		//need endless circle here because program wait for backup time and check time every minute
 		for true {
 			if (time.Now().Hour() == backup_time.Hour()) && (time.Now().Minute() == backup_time.Minute()) {
-				backupProcess(*new_screen_id, *new_stoper_time, *new_server_path, *backup_folder_path, *max_files)
+				backupProcess(*new_screen_id, *new_stoper_time, *new_server_path, *backup_folder_path, *max_files, *rar_mode)
 				time.Sleep(time.Minute)
 				continue
 			} else {
@@ -42,16 +43,16 @@ func main() {
 			}
 		}
 	} else {
-		backupProcess(*new_screen_id, *new_stoper_time, *new_server_path, *backup_folder_path, *max_files)
+		backupProcess(*new_screen_id, *new_stoper_time, *new_server_path, *backup_folder_path, *max_files, *rar_mode)
 	}
 }
 
-func backupProcess(new_screen_id int, new_stoper_time int, new_server_path string, backup_folder_path string, max_files int) {
+func backupProcess(new_screen_id int, new_stoper_time int, new_server_path string, backup_folder_path string, max_files int, rar bool) {
 	fmt.Println("The server will be stopped after delay")
 	StopServer(new_screen_id, new_stoper_time)
 
 	fmt.Println("The server was stopped. Process of backup making was started...")
-	new_pack := MakePack(new_server_path)
+	new_pack := MakePack(new_server_path, rar)
 
 	fmt.Println("Backup file was successfully created! Process of uploading was started...")
 	var upload_goroutine sync.WaitGroup
@@ -64,7 +65,7 @@ func backupProcess(new_screen_id int, new_stoper_time int, new_server_path strin
 
 	//need to wait while uploading backup will be completed
 	upload_goroutine.Wait()
-	
+
 	CheckOld(backup_folder_path, max_files)
 	CleanBackups(new_pack)
 }

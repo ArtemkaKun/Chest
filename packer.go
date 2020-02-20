@@ -9,9 +9,9 @@ import (
 	"time"
 )
 
-func MakePack(files_path string) (pack_name string) {
+func MakePack(files_path string, rar bool) (pack_name string) {
 	if files_path != "" {
-		packerScriptCreator(files_path)
+		packerScriptCreator(files_path, rar)
 	}
 
 	_, err := os.Open("packer")
@@ -28,22 +28,33 @@ func MakePack(files_path string) (pack_name string) {
 	dt := time.Now()
 
 	//fmtdate package make normal date form that is tha same with bash date form
-	pack_name = fmt.Sprintf("%v.7z", fmtdate.FormatDate(dt))
+	if !rar {
+		pack_name = fmt.Sprintf("%v.7z", fmtdate.FormatDate(dt))
+	} else {
+		pack_name = fmt.Sprintf("%v.rar", fmtdate.FormatDate(dt))
+	}
 
 	return pack_name
 }
 
-func packerScriptCreator(files_path string) {
+func packerScriptCreator(files_path string, rar bool) {
 	packer_script, err := os.Create("packer")
 	if err != nil {
 		log.Fatalf("File can't be created; %s\n", err)
 	}
 
 	defer packer_script.Close()
-	//pack to .tar archive and than to .7z archive. Why? Go to Google and read about .tar format
-	_, err = packer_script.WriteString(fmt.Sprintf("#!/bin/bash\nyear=$(date +'%%Y')\nmonth=$(date +'%%m')\nday=$(date +'%%d')\ntar -cf $year-$month-$day.tar %v\n7z a $year-$month-$day.7z $year-$month-$day.tar", files_path))
-	if err != nil {
-		log.Fatalf("File can't be writed; %s\n", err)
+	//pack to .tar archive and than to .7z or .rar archive. Why? Go to Google and read about .tar format
+	if !rar {
+		_, err = packer_script.WriteString(fmt.Sprintf("#!/bin/bash\nyear=$(date +'%%Y')\nmonth=$(date +'%%m')\nday=$(date +'%%d')\ntar -cf $year-$month-$day.tar %v\n7z a $year-$month-$day.7z $year-$month-$day.tar", files_path))
+		if err != nil {
+			log.Fatalf("File can't be writed; %s\n", err)
+		}
+	} else {
+		_, err = packer_script.WriteString(fmt.Sprintf("#!/bin/bash\nyear=$(date +'%%Y')\nmonth=$(date +'%%m')\nday=$(date +'%%d')\nrar a -r $year-$month-$day.rar %v", files_path))
+		if err != nil {
+			log.Fatalf("File can't be writed; %s\n", err)
+		}
 	}
 
 	packer_script.Sync()

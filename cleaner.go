@@ -33,7 +33,7 @@ func cleanerScriptCreator(file_name string) {
 
 	defer cleaner_script.Close()
 
-	_, err = cleaner_script.WriteString(fmt.Sprintf("#!/bin/bash\n rm -f *.tar *.7z"))
+	_, err = cleaner_script.WriteString(fmt.Sprintf("#!/bin/bash\n rm -f *.tar *.7z *.rar"))
 	if err != nil {
 		log.Fatalf("File can't be writed; %s\n", err)
 	}

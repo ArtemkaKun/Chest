@@ -22,12 +22,12 @@ func CheckOld(backup_folder string, max_files int) {
 		if len(r.Files) > max_files {
 			for range r.Files {
 				for n, j := range r.Files {
-					file_date, err := time.Parse("2006-01-02", j.Name[0:len(j.Name)-3])
+					file_date, err := time.Parse("2006-01-02", j.Name[0:10])
 					if err != nil {
 						log.Fatalf("%v", err)
 					}
 					if n+1 <= len(r.Files)-1 {
-						next_file_date, _ := time.Parse("2006-01-02", r.Files[n+1].Name[0:len(j.Name)-3])
+						next_file_date, _ := time.Parse("2006-01-02", r.Files[n+1].Name[0:10])
 
 						if file_date.After(next_file_date) {
 							buffer := r.Files[n]
