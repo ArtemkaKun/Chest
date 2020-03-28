@@ -19,7 +19,8 @@ func main() {
 
 	//var that contains a path to folder you want to backup (Minecraft server folder)
 	new_server_path := flag.String("f", "", "Make new packer script (place here path to your Minecraft server files)")
-
+	rar_mode := flag.Bool("rar", false, "If you want to make RAR archives")
+	local_mode := flag.Bool("local", false, "If you want to make local backup")
 	//var that contains a path(or ID) to folder (on Google Drive for example) where program will be upload backups
 	backup_folder_path := flag.String("bf", "", "Path to backup folder (place here id of folder if you use Google Drive)")
 
@@ -27,7 +28,7 @@ func main() {
 	test_mode := flag.Bool("test", false, "Turn on test mode, that allow not wait for backup time")
 	new_hour := flag.Int("h", 00, "Hour when program need to backup")
 	new_minute := flag.Int("m", 00, "Minute when program need to backup")
-	rar_mode := flag.Bool("rar", false, "If you want to make RAR archives")
+
 	flag.Parse()
 
 	backup_time := time.Date(time.Now().Year(), time.Now().Month(), time.Now().Day(), *new_hour, *new_minute, 0, 0, time.Now().UTC().Location())
@@ -35,7 +36,7 @@ func main() {
 		//need endless circle here because program wait for backup time and check time every minute
 		for true {
 			if (time.Now().Hour() == backup_time.Hour()) && (time.Now().Minute() == backup_time.Minute()) {
-				backupProcess(*new_screen_id, *new_stoper_time, *new_server_path, *backup_folder_path, *max_files, *rar_mode)
+				backupProcess(*new_screen_id, *new_stoper_time, *new_server_path, *backup_folder_path, *max_files, *rar_mode, *local_mode)
 				time.Sleep(time.Minute)
 				continue
 			} else {
@@ -43,29 +44,39 @@ func main() {
 			}
 		}
 	} else {
-		backupProcess(*new_screen_id, *new_stoper_time, *new_server_path, *backup_folder_path, *max_files, *rar_mode)
+		backupProcess(*new_screen_id, *new_stoper_time, *new_server_path, *backup_folder_path, *max_files, *rar_mode, *local_mode)
 	}
 }
 
-func backupProcess(new_screen_id int, new_stoper_time int, new_server_path string, backup_folder_path string, max_files int, rar bool) {
+func backupProcess(new_screen_id int, new_stoper_time int, new_server_path string, backup_folder_path string, max_files int, rar bool, local bool) {
 	fmt.Println("The server will be stopped after delay")
 	StopServer(new_screen_id, new_stoper_time)
 
 	fmt.Println("The server was stopped. Process of backup making was started...")
-	new_pack := MakePack(new_server_path, rar)
+	new_pack := MakePack(new_server_path, rar, local)
 
-	fmt.Println("Backup file was successfully created! Process of uploading was started...")
-	var upload_goroutine sync.WaitGroup
-	upload_goroutine.Add(1)
-	go UploadPack(new_pack, &upload_goroutine, backup_folder_path)
+	if !local {
+		fmt.Println("Backup file was successfully created! Process of uploading was started...")
+		var upload_goroutine sync.WaitGroup
+		upload_goroutine.Add(1)
+		go UploadPack(new_pack, &upload_goroutine, backup_folder_path)
 
+		startServ(new_screen_id)
+
+		//need to wait while uploading backup will be completed
+		upload_goroutine.Wait()
+
+		CheckOld(backup_folder_path, max_files)
+
+	} else {
+		startServ(new_screen_id)
+	}
+
+	CleanBackups(new_pack)
+}
+
+func startServ(new_screen_id int) {
 	fmt.Println("Starting the server...")
 	StartServer(new_screen_id)
 	fmt.Println("The server started")
-
-	//need to wait while uploading backup will be completed
-	upload_goroutine.Wait()
-
-	CheckOld(backup_folder_path, max_files)
-	CleanBackups(new_pack)
 }

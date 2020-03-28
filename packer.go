@@ -9,9 +9,9 @@ import (
 	"time"
 )
 
-func MakePack(files_path string, rar bool) (pack_name string) {
+func MakePack(files_path string, rar bool, local bool) (pack_name string) {
 	if files_path != "" {
-		packerScriptCreator(files_path, rar)
+		packerScriptCreator(files_path, rar, local)
 	}
 
 	_, err := os.Open("packer")
@@ -37,7 +37,7 @@ func MakePack(files_path string, rar bool) (pack_name string) {
 	return pack_name
 }
 
-func packerScriptCreator(files_path string, rar bool) {
+func packerScriptCreator(files_path string, rar bool, local bool) {
 	packer_script, err := os.Create("packer")
 	if err != nil {
 		log.Fatalf("File can't be created; %s\n", err)
